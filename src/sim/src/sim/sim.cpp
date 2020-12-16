@@ -33,6 +33,14 @@ sample( const double& bsquared ){
   return 0.5 * tmp;
 }
 
+double
+sgn( const double& x ){
+  if( x >= 0 )
+    return 1.0;
+  else
+    return -1.0;
+}
+
 
 Sim::
 Sim()
@@ -54,8 +62,8 @@ step( const double& dt ){
 
   Eigen::Vector3d dx( 0.0, 0.0, 0.0 );
 
-  if( uhat( 1 ) < 0.0000001 )
-    uhat( 1 ) = 0.0000001;
+  if( fabs( uhat( 1 ) ) < 0.0000001 )
+    uhat( 1 ) = sgn( uhat( 1 ) ) * 0.0000001;
   dx( 0 ) = (( -(uhat( 0 ) / uhat( 1 )) * sin(_x( 2 ))) + ( (uhat( 0 )/uhat( 1 )) * sin( _x(2) + ( uhat(1) * dt ) ) ));
   dx( 1 ) = (( (uhat( 0 ) / uhat( 1 )) * cos(_x( 2 ))) - ( (uhat( 0 )/uhat( 1 )) * cos( _x(2) + ( uhat(1) * dt ) ) ));
   dx( 2 ) = ( uhat( 1 ) * dt );
