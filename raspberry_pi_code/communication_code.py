@@ -3,31 +3,37 @@ import serial
 import time
 
 
-gamepad_map = {
-  "ABS_Y": "JRY ",
-  "ABS_X": "JRX ",
-  "BTN_THUMBR": "JRP ",
-  "ABS_RY": "JLY ",
-  "ABS_RX": "JLX ",
-  "BTN_THUMBL": "JLP ",
-  "ABS_HAT0Y": "BRY ",
-  "ABS_HAT0X": "BRX ",
-  "BTN_WEST": "Y ",
-  "BTN_NORTH": "X ",
-  "BTN_EAST": "B ",
-  "BTN_SOUTH": "A ",
-  "BTN_SELECT": "SL ",
-  "BTN_START": "ST ",
-  "BTN_MODE": "H ",
-  "BTN_TR": "R1 ",
-  "ABS_RZ": "R2 ",
-  "BTN_TL": "L1 ",
-  "ABS_Z": "L2 "
+gamepad_state = {
+  "ABS_Y": 0,
+  "ABS_X": 0,
+  "BTN_THUMBR": 0,
+  "ABS_RZ": 0,
+  "ABS_Z": 0,
+  "BTN_THUMBL": 0,
+  "ABS_HAT0Y": 0,
+  "ABS_HAT0X": 0,
+  "BTN_WEST": 0,
+  "BTN_NORTH": 0,
+  "BTN_EAST": 0,
+  "BTN_SOUTH": 0,
+  "BTN_SELECT": 0,
+  "BTN_START": 0,
+  "BTN_MODE": 0,
+  "BTN_TR": 0,
+  "BTN_TR2": 0,
+  "BTN_TL": 0,
+  "BTN_TL2": 0
 }
+
+def adjust_value(num, state):
+  val = (num - 255) if state in ["ABS_Y", "ABS_X", "ABS_RZ", "ABS_Z"] else num
+  val = 1 if state in ["ABS_TR2", "ABS_TL2"] and num == 255 else 0
+
+
 
 def handleJoystick():
   print("in handling joystick")
-  with serial.Serial('/dev/ttyACM0', 115200, timeout=0.1) as arduino:
+with serial.Serial('/dev/ttyACM0', 115200, timeout=0.1) as arduino:
     while True:
       events = inputs.get_gamepad()
       for event in events:
@@ -47,7 +53,7 @@ def handleSerialWrite(dev, code, value):
     data = dev.readline()
     if data:
       print(data[:-2])
-      break
+      # break
 
 
 def main():
